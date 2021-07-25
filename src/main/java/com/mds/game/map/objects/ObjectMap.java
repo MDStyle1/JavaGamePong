@@ -227,7 +227,6 @@ public class ObjectMap {
                         }else {
                             l1=object.r;
                         }
-                        System.out.println("distance="+l2+"  diag="+l1);
                         l1=l1+leanghtDiag;
                         if(l2<=l1){
                         hit('a',false,0);
@@ -254,14 +253,12 @@ public class ObjectMap {
     }
     protected float findLenghtForAngle(float angle){
         int a = (int) (angle*180/Math.PI);
-        System.out.println("angle="+a);
         a=Math.abs(a);
         a=stabAngle(a);
         float a1;
         int da= (int) dAngle;
         if(a>=da){
             a1= (float) ((90-a)*Math.PI/180);
-            System.out.println("angle="+a+"  diag1="+(sizeY)/(float)Math.cos(a1));
             return (sizeY)/(float)Math.cos(a1);
         } else {
             a1= (float) (a*Math.PI/180);
