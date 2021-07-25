@@ -10,7 +10,7 @@ import com.mds.game.map.objects.Board;
 public class Game implements GameInterface{
     private Map map;
     private boolean endGame=false;
-    public int delay=50;
+    public int delay=5;
     private boolean pause = true;
     private long lastFrameTime;
     private float deltaTime=0;

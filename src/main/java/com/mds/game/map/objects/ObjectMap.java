@@ -77,7 +77,7 @@ public class ObjectMap {
             float sx=sizeX/2;
             float sy=sizeY/2;
             leanghtDiag= (float) Math.sqrt(sx*sx+sy*sy);
-            dAngle= (float) (Math.atan(sx/sy)*180/Math.PI);
+            dAngle= (float) (Math.atan(sy/sx)*180/Math.PI);
         }
         rightVector = new Vector2d(forwardVector.getY(),-forwardVector.getX());
         coordList.add(coord1);
@@ -213,14 +213,12 @@ public class ObjectMap {
                 Segment s1=new Segment(object.x,object.y,nextMoveX,nextMoveY);
                 float l2 = s1.length();
                 float ms = leanghtDiag*2 + object.leanghtDiag;
-                System.out.println("ms="+ms+"  lenght="+l2);
                 if (ms >=l2) {
                     Vector2d v1 = s1.createVector2d();
                     v1.normalise();
                     Vector2d v2 = new Vector2d(-v1.getX(),-v1.getY());
                     testV1 =v2;
-                    float angle=(float) Math.acos(vectorMove.scolar(v1));
-                    System.out.println("angle1="+angle);
+                    float angle=vectorMove.scolar(v2);
                     if(angle>0){
                         float l1;
                         if(object.typeCollision==TypeCollision.box){
@@ -230,10 +228,9 @@ public class ObjectMap {
                             l1=object.r;
                         }
                         l1=l1+leanghtDiag;
-                        System.out.println("l1="+l1+"  l2="+l2);
                         if(l2<=l1){
                         hit('a',false,0);
-                            map.game.playPause();
+//                            map.game.playPause();
                             return true;
                         }
                     }
@@ -256,20 +253,14 @@ public class ObjectMap {
     }
     protected float findLenghtForAngle(float angle){
         int a = (int) (angle*180/Math.PI);
-        System.out.println("//////");
         a=Math.abs(a);
-        System.out.println("angle="+a);
         a=stabAngle(a);
         float a1= (float) (a*Math.PI/180);
-        System.out.println("angle="+a);
-        System.out.println("sizex/2="+(sizeX/2));
-        System.out.println("sin="+(float)Math.sin(a1));
-        System.out.println("res="+(sizeX/2)/(float)Math.sin(a1));
         int da= (int) dAngle;
         if(a>=da){
-            return (float) ((sizeX/2)/Math.sin(a1));
+            return (sizeY)/(float)Math.cos(90-a1);
         } else {
-            return (float) ((sizeY/2)/Math.cos(a1));
+            return (sizeX)/(float)Math.cos(a1);
         }
     }
     protected int stabAngle(int angle){
