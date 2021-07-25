@@ -27,6 +27,6 @@ public class TestSegment {
         System.out.println("angle="+angle);
         angle = (float) Math.acos(v1.scolar(v3));
         a = (int) (angle*180/Math.PI);
-        System.out.println("angle="+angle);
+        System.out.println("angle="+(10)/(float)Math.cos(8*Math.PI/180));
     }
 }
