@@ -1,6 +1,6 @@
 package com.mds.game;
 
 public interface GameInterface {
-    public boolean startCreateGame(StartCreateInterface starter);
-    public void playPause();
+    boolean startCreateGame(StartCreateInterface starter);
+    void playPause();
 }

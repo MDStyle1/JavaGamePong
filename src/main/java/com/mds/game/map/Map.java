@@ -2,6 +2,7 @@ package com.mds.game.map;
 
 import com.mds.game.Game;
 import com.mds.game.map.objects.ObjectMap;
+import com.mds.game.map.objects.ObjectMapInterface;
 import com.mds.game.util.Segment;
 
 import java.util.ArrayList;
@@ -12,7 +13,6 @@ public class Map implements MapInterface {
     private int sizeX;
     private int sizeY;
     public Game game;
-    public List<Segment> segmentList = new ArrayList<Segment>();
 
     public Map(int sizeX, int sizeY) {
         if(sizeX<50){
@@ -24,27 +24,6 @@ public class Map implements MapInterface {
         objectsMap = new ArrayList<ObjectMap>();
     }
 
-    public void tick(float deltaTime) {
-        for (ObjectMap object: objectsMap){
-            object.tick(deltaTime);
-        }
-    }
-
-    private void updateSegment(){
-        segmentList.add(new Segment(0,0,0,sizeY));
-        segmentList.add(new Segment(0,sizeY,sizeX,sizeY));
-        segmentList.add(new Segment(sizeX,sizeY,sizeX,0));
-        segmentList.add(new Segment(sizeX,0,0,0));
-    }
-    public void addObjectMap(ObjectMap objectMap){
-        objectsMap.add(objectMap);
-    }
-
-    public List<ObjectMap> getObjectsMap() {
-        List<ObjectMap> s = new ArrayList<ObjectMap>(objectsMap);
-        return s;
-    }
-
     public int getSizeX() {
         return sizeX;
     }
@@ -53,4 +32,20 @@ public class Map implements MapInterface {
         return sizeY;
     }
 
+    public void addObjectMap(ObjectMap objectMap){
+        objectsMap.add(objectMap);
+    }
+
+    public List<ObjectMapInterface> getObjectsMap() {
+        List<ObjectMapInterface> s = new ArrayList<ObjectMapInterface>(objectsMap);
+        return s;
+    }
+
+    public List<ObjectMap> getObjectsInMap() { return objectsMap; }
+
+    public void tick(float deltaTime) {
+        for (ObjectMap object: objectsMap){
+            object.tick(deltaTime);
+        }
+    }
 }

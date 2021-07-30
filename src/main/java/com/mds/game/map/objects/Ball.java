@@ -15,7 +15,7 @@ public class Ball extends ObjectMap {
     }
     @Override
     public void tick(float deltaTime) {
-        if(getVelocity()>0){
+        if(currentVelocity>0){
             if(nextMove(deltaTime)){
                 updateNextCoordinate();
                 if(checkHitMap()!=true&&checkHitObject()!=true){

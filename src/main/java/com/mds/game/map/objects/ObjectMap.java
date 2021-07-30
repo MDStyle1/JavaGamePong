@@ -6,7 +6,7 @@ import com.mds.game.util.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ObjectMap {
+public class ObjectMap implements ObjectMapInterface{
     protected int x;
     protected int y;
     protected int r;
@@ -25,9 +25,9 @@ public class ObjectMap {
     protected int sizeY;
     protected boolean canMoved = false;
     protected TypeObject typeObject;
-    protected boolean canMove =false;
     protected float leanghtDiag=0;
     protected float dAngle=0;
+    protected char hitChar;
 
     protected Coord2d coord1=new Coord2d(0,0);
     protected Coord2d coord2=new Coord2d(0,0);
@@ -68,7 +68,43 @@ public class ObjectMap {
         updateSet();
     }
 
-    public void updateSet(){
+    public TypeObject getTypeObject() {
+        return typeObject;
+    }
+
+    public Coord2d getCoord1() { return coord1.getDublicate(); }
+
+    public Coord2d getCoord2() { return coord2.getDublicate(); }
+
+    public Coord2d getCoord3() { return coord3.getDublicate(); }
+
+    public Coord2d getCoord4() { return coord4.getDublicate(); }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public Vector2d getForwardVector() {
+        return new Vector2d(vectorMove.getX(),vectorMove.getY());
+    }
+
+    public int getSizeX() {
+        return sizeX;
+    }
+
+    public int getSizeY() {
+        return sizeY;
+    }
+
+    public int getR(){
+        return r;
+    }
+
+    protected void updateSet(){
         if(typeCollision==TypeCollision.sphere){
             leanghtDiag=r;
             sizeY=r;
@@ -87,44 +123,8 @@ public class ObjectMap {
         updateCoordinate();
     }
 
-    public ObjectMap getDublicate() {
-        ObjectMap s = new ObjectMap(x,y,sizeX,sizeY,map);
-        return s;
-    }
     public void tick(float deltaTime) {
 
-    }
-
-    private void move(float deltaTime) {
-
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public float getVelocity() {
-        return currentVelocity;
-    }
-
-    public Vector2d getForwardVector() {
-        return new Vector2d(vectorMove.getX(),vectorMove.getY());
-    }
-
-    public int getSizeX() {
-        return sizeX;
-    }
-
-    public int getSizeY() {
-        return sizeY;
-    }
-
-    public int getR(){
-        return r;
     }
 
     protected boolean nextMove(float deltaTime){
@@ -201,13 +201,8 @@ public class ObjectMap {
         }
         return false;
     }
-
-    public Vector2d testV1 = new Vector2d(0,0);
-    public Vector2d testV2 = new Vector2d(0,0);
-
-
     protected boolean checkHitObject(){
-        List<ObjectMap> objects = map.getObjectsMap();
+        List<ObjectMap> objects = map.getObjectsInMap();
         for(ObjectMap object:objects) {
             if (object != this) {
                 Segment s1=new Segment(object.x,object.y,nextMoveX,nextMoveY);
@@ -217,19 +212,18 @@ public class ObjectMap {
                     Vector2d v1 = s1.createVector2d();
                     v1.normalise();
                     Vector2d v2 = new Vector2d(-v1.getX(),-v1.getY());
-                    testV1 =v2;
                     float angle=vectorMove.scolar(v2);
                     if(angle>0){
                         float l1;
                         if(object.typeCollision==TypeCollision.box){
                             angle=(float) Math.acos(object.forwardVector.scolar(v1));
-                            l1=object.findLenghtForAngle(angle);
+                            l1=object.findLenghtForAngle(angle,this);
                         }else {
                             l1=object.r;
                         }
                         l1=l1+leanghtDiag;
                         if(l2<=l1){
-                        hit('a',false,0);
+                        hit(hitChar,false,0);
 //                            map.game.playPause();
                             return true;
                         }
@@ -240,18 +234,7 @@ public class ObjectMap {
         }
         return false;
     }
-    protected ResultMinSegment findMinSegment(ObjectMap object){
-        Coord2d coord2d=new Coord2d(object.x,object.y);
-        ResultMinSegment result = new ResultMinSegment();
-        result.segment=new Segment(coord1,coord2d);
-        float s = result.segment.length();
-        s = returnMinLenghtSegment(s,new Segment(coord2,coord2d),result);
-        s = returnMinLenghtSegment(s,new Segment(coord3,coord2d),result);
-        s = returnMinLenghtSegment(s,new Segment(coord4,coord2d),result);
-        result.lenght=s;
-        return result;
-    }
-    protected float findLenghtForAngle(float angle){
+    protected float findLenghtForAngle(float angle,ObjectMap objectMap){
         int a = (int) (angle*180/Math.PI);
         a=Math.abs(a);
         a=stabAngle(a);
@@ -259,9 +242,11 @@ public class ObjectMap {
         int da= (int) dAngle;
         if(a>=da){
             a1= (float) ((90-a)*Math.PI/180);
+            objectMap.hitChar='y';
             return (sizeY)/(float)Math.cos(a1);
         } else {
             a1= (float) (a*Math.PI/180);
+            objectMap.hitChar='x';
             return (sizeX)/(float)Math.cos(a1);
         }
     }
@@ -274,17 +259,6 @@ public class ObjectMap {
         }
         return angle;
     }
-    protected float returnMinLenghtSegment(float a,Segment segment,ResultMinSegment result){
-        float b =segment.length();
-        if(b<a){
-            result.segment=segment;
-            return b;
-        } else return a;
-    }
-    protected class ResultMinSegment{
-        Segment segment;
-        float lenght;
-    }
     protected void hit(char a,boolean endGame,int player){
 
     }
@@ -292,9 +266,5 @@ public class ObjectMap {
         x = nextMoveX;
         y = nextMoveY;
         updateCoordinate();
-    }
-
-    public TypeObject getTypeObject() {
-        return typeObject;
     }
 }
