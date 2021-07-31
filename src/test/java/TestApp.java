@@ -16,5 +16,7 @@ public class TestApp {
     private void start(){
         VisualEventInterface vis=new VisualEvent(this);
         GameInterface game = Game.createGame(vis);
+        game.createMapAndStart();
+        game.playPause();
     }
 }

@@ -3,7 +3,7 @@ import com.mds.game.VisualEventInterface;
 
 public class VisualEvent implements VisualEventInterface {
     private TestApp app;
-    private GameInterface game;
+    public GameInterface game;
 
     public VisualEvent(TestApp app) {
         this.app = app;
@@ -16,7 +16,6 @@ public class VisualEvent implements VisualEventInterface {
 
     @Override
     public void eventCreateGame() {
-        game.createMapAndStart();
     }
 
     @Override
