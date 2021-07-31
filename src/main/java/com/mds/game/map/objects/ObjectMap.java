@@ -193,10 +193,10 @@ public class ObjectMap implements ObjectMapInterface{
             hit('x',false,0);
             return true;
         } else if(coord2d.y<=0) {
-            hit('y',true,1);
+            hit('y',true,2);
             return true;
         } else if(coord2d.y>=map.getSizeY()){
-            hit('y',true,2);
+            hit('y',true,1);
             return true;
         }
         return false;
@@ -213,7 +213,7 @@ public class ObjectMap implements ObjectMapInterface{
                     v1.normalise();
                     Vector2d v2 = new Vector2d(-v1.getX(),-v1.getY());
                     float angle=vectorMove.scolar(v2);
-                    if(angle>0){
+                    if(angle>-0.2){
                         float l1;
                         if(object.typeCollision==TypeCollision.box){
                             angle=(float) Math.acos(object.forwardVector.scolar(v1));

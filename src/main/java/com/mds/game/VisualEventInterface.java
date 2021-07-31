@@ -1,8 +1,7 @@
 package com.mds.game;
 
 public interface VisualEventInterface {
-    public void endGame(int Player);
-    public void createGame();
-    public void gameStart();
-    public void setGameInterface(GameInterface gameInterface);
+    public void eventEndGame(int Player);
+    public void eventCreateGame();
+    public void eventGameStart();
 }

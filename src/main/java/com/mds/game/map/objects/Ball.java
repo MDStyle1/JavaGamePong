@@ -26,7 +26,6 @@ public class Ball extends ObjectMap {
     }
     @Override
     protected void hit(char a,boolean endGame,int player){
-        endGame=false;
         if(endGame){
             map.game.endGame(player);
         }else {
@@ -34,10 +33,10 @@ public class Ball extends ObjectMap {
                 vectorMove.reverseX();
             }else if(a=='y') {
                 vectorMove.reverseY();
+                currentVelocity+=10;
             } else {
                 vectorMove.reverse();
             }
         }
-        //velocity+=10;
     }
 }

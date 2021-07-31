@@ -1,6 +1,5 @@
 import com.mds.game.Game;
 import com.mds.game.GameInterface;
-import com.mds.game.StartCreateInterface;
 import com.mds.game.VisualEventInterface;
 import com.mds.game.controller.PlayerControllerInterface;
 import com.mds.game.map.MapInterface;
@@ -17,16 +16,5 @@ public class TestApp {
     private void start(){
         VisualEventInterface vis=new VisualEvent(this);
         GameInterface game = Game.createGame(vis);
-    }
-    private class Starter implements StartCreateInterface {
-        @Override
-        public void setPlayer(PlayerControllerInterface player) {
-
-        }
-
-        @Override
-        public void setMap(MapInterface map) {
-
-        }
     }
 }

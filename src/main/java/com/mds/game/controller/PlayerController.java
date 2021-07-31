@@ -9,12 +9,7 @@ public class PlayerController implements PlayerControllerInterface{
         this.number = number;
         this.game = game;
         this.map = map;
-        int vy;
-        if(number==1){
-            vy=20;
-        } else vy=map.getSizeY()-20;
-        board = new Board(map.getSizeX()/2,vy,20,10,map);
-        map.addObjectMap(board);
+        board = map.addPlayer(number);
     }
 
     protected Board board;
@@ -27,7 +22,4 @@ public class PlayerController implements PlayerControllerInterface{
         board.eventMove(v);
     }
 
-    public void setMap(Map map) {
-        this.map = map;
-    }
 }

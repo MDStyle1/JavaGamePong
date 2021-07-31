@@ -1,20 +1,26 @@
 package com.mds.game.map;
 
 import com.mds.game.Game;
+import com.mds.game.controller.PlayerController;
+import com.mds.game.map.objects.Ball;
+import com.mds.game.map.objects.Board;
 import com.mds.game.map.objects.ObjectMap;
 import com.mds.game.map.objects.ObjectMapInterface;
-import com.mds.game.util.Segment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Map implements MapInterface {
-    private List<ObjectMap> objectsMap;
-    private int sizeX;
-    private int sizeY;
+    protected List<ObjectMap> objectsMap;
+    protected int sizeX;
+    protected int sizeY;
+    protected boolean player1=false;
+    protected boolean player2=false;
+    protected Board boardPlayer1;
+    protected Board boardPlayer2;
     public Game game;
 
-    public Map(int sizeX, int sizeY) {
+    public Map(int sizeX, int sizeY,Game game) {
         if(sizeX<50){
             this.sizeX = 50;
         } else this.sizeX = sizeX;
@@ -22,6 +28,8 @@ public class Map implements MapInterface {
             this.sizeY = 200;
         } else this.sizeY = sizeY;
         objectsMap = new ArrayList<ObjectMap>();
+        this.game = game;
+        addObjectMap(new Ball(sizeX/2,sizeY/2,10,this));
     }
 
     public int getSizeX() {
@@ -47,5 +55,24 @@ public class Map implements MapInterface {
         for (ObjectMap object: objectsMap){
             object.tick(deltaTime);
         }
+    }
+
+    public Board addPlayer(int number){
+        int vy;
+        Board board;
+        if(number==1){
+            if(!player1){
+                vy=10;
+                board = new Board(sizeX/2,vy,20,5,this);
+                addObjectMap(board);
+            } else board=boardPlayer1;
+        } else {
+            if(!player2){
+                vy=sizeY-10;
+                board = new Board(sizeX/2,vy,20,5,this);
+                addObjectMap(board);
+            } else board=boardPlayer2;
+        }
+        return board;
     }
 }

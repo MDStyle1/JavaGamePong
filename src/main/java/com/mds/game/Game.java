@@ -4,8 +4,6 @@ import com.mds.game.controller.PlayerController;
 import com.mds.game.controller.PlayerControllerInterface;
 import com.mds.game.map.Map;
 import com.mds.game.map.MapInterface;
-import com.mds.game.map.objects.Ball;
-import com.mds.game.map.objects.Board;
 
 public class Game implements GameInterface{
     private Map map;
@@ -14,47 +12,50 @@ public class Game implements GameInterface{
     private boolean pause = true;
     private long lastFrameTime;
     private float deltaTime=0;
-    private PlayerController playerController;
+    private PlayerController playerController1;
+    private PlayerController playerController2;
     public VisualEventInterface visualEventInterface;
-    private boolean canPreStart=false;
+    private boolean canCreateMap =false;
+    private boolean isStartingGame = false;
 
     private Thread threadGame;
     private ThreadGame thGame;
 
+    private float cfps=0;
+    private int count =0,timer=0;
+
     private Game(VisualEventInterface visualEventInterface) {
         this.visualEventInterface= visualEventInterface;
-        map = new Map(100,200);
-        map.addObjectMap(new Ball(50,100,10,map));
-        map.game = this;
-        playerController = new PlayerController(map,this,1);
-        playerController.setMap(map);
-        visualEventInterface.setGameInterface(this);
-        canPreStart=true;
-        visualEventInterface.createGame();
+        canCreateMap =true;
+        visualEventInterface.eventCreateGame();
     }
     public static GameInterface createGame(VisualEventInterface visualEventInterface) {
         GameInterface gameInterface = new Game(visualEventInterface);
         return gameInterface;
-    }
-    private boolean isStartingGame = false;
-    private void startingGame(){
-        if(isStartingGame){
-
-        } else {
-            isStartingGame=true;
-            thGame=new ThreadGame();
-            threadGame = new Thread(thGame);
-            threadGame.start();
-            visualEventInterface.gameStart();
-        }
     }
     @Override
     public void playPause() {
         pause = !pause;
     }
 
+    @Override
     public boolean isPause() {
         return pause;
+    }
+
+    @Override
+    public PlayerControllerInterface getPlayer1() {
+        return playerController1;
+    }
+
+    @Override
+    public PlayerControllerInterface getPlayer2() {
+        return playerController2;
+    }
+
+    @Override
+    public MapInterface getMap() {
+        return map;
     }
 
     private class ThreadGame implements Runnable {
@@ -64,8 +65,6 @@ public class Game implements GameInterface{
             playGame();
         }
     }
-    private float cfps=0;
-    private int count =0,i=0;
     private void playGame() {
         while (endGame==false){
             if(pause==false&&endGame==false){
@@ -77,10 +76,10 @@ public class Game implements GameInterface{
             deltaTime = (currentTime - lastFrameTime)*0.000000001f;
             lastFrameTime = currentTime;
             if(cfps>1){
-                //System.out.println(i +" Game!"+count+" "+(float)deltaTime);
+                //System.out.println(timer +" Game!"+count+" "+(float)deltaTime);
                 cfps-=1;
                 count=0;
-                i++;
+                timer++;
             }
             try {
                 threadGame.sleep(delay);
@@ -93,18 +92,26 @@ public class Game implements GameInterface{
     }
     public void endGame(int playerWin){
         endGame=true;
-        System.out.println("Wiiiin");
-        visualEventInterface.endGame(playerWin);
+        visualEventInterface.eventEndGame(playerWin);
     }
     @Override
-    public boolean startCreateGame(StartCreateInterface start){
-        if(canPreStart)
+    public boolean createMapAndStart(){
+        if(canCreateMap)
         {
-            start.setMap(map);
-            start.setPlayer(playerController);
+            map = new Map(100,200,this);
+            playerController1 = new PlayerController(map,this,1);
+            playerController2 = new PlayerController(map,this,2);
             startingGame();
             return true;
         } else return false;
-
+    }
+    private void startingGame(){
+        if(!isStartingGame){
+            isStartingGame=true;
+            thGame=new ThreadGame();
+            threadGame = new Thread(thGame);
+            threadGame.start();
+            visualEventInterface.eventGameStart();
+        }
     }
 }
