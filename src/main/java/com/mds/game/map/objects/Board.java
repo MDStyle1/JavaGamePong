@@ -12,7 +12,7 @@ public class Board extends ObjectMap{
         vectorMove.setVector(0,0);
     }
     @Override
-    public void tick(float deltaTime) {
+    synchronized public void tick(float deltaTime) {
         if(vectorMove.getX()!=0||vectorMove.getY()!=0){
             if(nextMove(deltaTime)){
                 updateNextCoordinate();
@@ -26,7 +26,7 @@ public class Board extends ObjectMap{
     protected void hit(char a,boolean endGame,int player){
         //velocity+=10;
     }
-    public void eventMove(int v){
+    synchronized public void eventMove(int v){
         if(v<=-1){
             vectorMove.setVector(-1,0);
         }else if(v>=1){

@@ -123,7 +123,7 @@ public class ObjectMap implements ObjectMapInterface{
         updateCoordinate();
     }
 
-    public void tick(float deltaTime) {
+    synchronized public void tick(float deltaTime) {
 
     }
 
