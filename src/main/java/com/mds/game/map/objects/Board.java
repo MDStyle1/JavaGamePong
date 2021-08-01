@@ -2,10 +2,12 @@ package com.mds.game.map.objects;
 
 import com.mds.game.map.Map;
 
+import java.util.List;
+
 public class Board extends ObjectMap{
 
-    public Board(int x, int y, int sizeX, int sizeY, Map map) {
-        super(x, y, sizeX, sizeY, map);
+    public Board(int x, int y, int sizeX, int sizeY, Map map, List<ObjectMap> objectMap) {
+        super(x, y, sizeX, sizeY, map, objectMap);
         normalVelocity=30;
         currentVelocity =normalVelocity;
         typeObject=TypeObject.board;

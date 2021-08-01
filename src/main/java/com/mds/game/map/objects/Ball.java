@@ -6,8 +6,8 @@ import java.util.List;
 
 public class Ball extends ObjectMap {
 
-    public Ball(int x, int y, int r, Map map) {
-        super(x, y, r,map);
+    public Ball(int x, int y, int r, Map map,List<ObjectMap> objectMap) {
+        super(x, y, r,map, objectMap);
         normalVelocity=30;
         currentVelocity=normalVelocity;
         typeObject=TypeObject.ball;

@@ -2,6 +2,7 @@ package com.mds.game.map.objects;
 
 import com.mds.game.map.Map;
 import com.mds.game.util.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ public class ObjectMap implements ObjectMapInterface{
     protected float leanghtDiag=0;
     protected float dAngle=0;
     protected char hitChar;
+    protected List<ObjectMap> objectMap;
 
     protected Coord2d coord1=new Coord2d(0,0);
     protected Coord2d coord2=new Coord2d(0,0);
@@ -40,7 +42,9 @@ public class ObjectMap implements ObjectMapInterface{
     protected CrossSegmentResult crossSegmentResult;
     protected List<Coord2d> coordList=new ArrayList<Coord2d>();
 
-    public ObjectMap(int x, int y,int sizeX, int sizeY,Map map) {
+    @Autowired
+    public ObjectMap(int x, int y,int sizeX, int sizeY,Map map,List<ObjectMap> objectMap) {
+        this.objectMap=objectMap;
         typeCollision = TypeCollision.box;
         this.map = map;
         this.x = x;
@@ -56,7 +60,9 @@ public class ObjectMap implements ObjectMapInterface{
         typeObject=TypeObject.object;
         updateSet();
     }
-    public ObjectMap(int x, int y,int r,Map map) {
+    @Autowired
+    public ObjectMap(int x, int y,int r,Map map,List<ObjectMap> objectMap) {
+        this.objectMap=objectMap;
         typeCollision = TypeCollision.sphere;
         this.map = map;
         this.x = x;
@@ -105,6 +111,7 @@ public class ObjectMap implements ObjectMapInterface{
     }
 
     protected void updateSet(){
+        objectMap.add(this);
         if(typeCollision==TypeCollision.sphere){
             leanghtDiag=r;
             sizeY=r;
