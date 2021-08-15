@@ -1,7 +1,9 @@
 package com.mds.game;
 
 import com.mds.game.controller.PlayerControllerInterface;
-import com.mds.game.map.MapInterface;
+import com.mds.game.map.objects.ObjectMapInterface;
+
+import java.util.List;
 
 public interface GameInterface {
     void playPause();
@@ -10,5 +12,9 @@ public interface GameInterface {
     void setVisualEventInterface(VisualEventInterface visualEventInterface);
     PlayerControllerInterface getPlayer1();
     PlayerControllerInterface getPlayer2();
-    MapInterface getMap();
+    List<ObjectMapInterface> getMap();
+    boolean authServer(String name,String password);
+    boolean authServer();
+    boolean registerServer(String name,String password);
+    String getStatusErrorServer();
 }

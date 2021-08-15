@@ -1,12 +1,24 @@
 package com.mds.game;
 
+import com.mds.game.client.Request;
+import com.mds.game.client.UserInfo;
 import com.mds.game.controller.PlayerController;
 import com.mds.game.controller.PlayerControllerInterface;
 import com.mds.game.map.Map;
-import com.mds.game.map.MapInterface;
+import com.mds.game.map.objects.ObjectMapInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 public class Game implements GameInterface{
+
+    private String host = "http://localhost:8080";
+    private String name;
+    private String password;
+    private boolean isAuth = false;
+    private boolean playOnline = false;
+    private String statusErrorServer;
+
     @Autowired
     private Map map;
     private boolean endGame=false;
@@ -57,8 +69,62 @@ public class Game implements GameInterface{
     }
 
     @Override
-    public MapInterface getMap() {
-        return map;
+    public List<ObjectMapInterface> getMap() {
+        return map.getObjectsMap();
+    }
+
+    @Override
+    public String getStatusErrorServer() {
+        return statusErrorServer;
+    }
+
+    @Override
+    public boolean authServer(String name, String password) {
+        if(!isAuth){
+            Request request = new Request<String>(name,password);
+            if(request.getRequest(host +"/login",String.class)){
+                playOnline = true;
+                isAuth=true;
+                return true;
+            }else {
+                statusErrorServer=request.status;
+                return false;
+            }
+        }else {
+            statusErrorServer="dont loggout";
+            return false;
+        }
+    }
+
+    @Override
+    public boolean authServer() {
+        if(!isAuth){
+            isAuth=true;
+            playOnline=false;
+            return true;
+        }else {
+            statusErrorServer = "dont loggout";
+            return false;
+        }
+    }
+
+    @Override
+    public boolean registerServer(String name, String password) {
+        if(!isAuth){
+            Request request = new Request<String>();
+            UserInfo userInfo = new UserInfo();
+            userInfo.name=name;
+            userInfo.password=password;
+            if(request.<UserInfo>postRequest(host +"/register",String.class,userInfo)){
+                return true;
+            }else {
+                statusErrorServer=request.status;
+                return false;
+            }
+        }else {
+            statusErrorServer = "dont loggout";
+            return false;
+        }
     }
 
     private class ThreadGame implements Runnable {
@@ -98,8 +164,10 @@ public class Game implements GameInterface{
     }
     @Override
     public boolean createMapAndStart(){
-        startingGame();
-        return true;
+        if(isAuth){
+            startingGame();
+            return true;
+        } else return false;
     }
     private void startingGame(){
         if(!isStartingGame){

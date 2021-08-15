@@ -5,6 +5,8 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.support.BasicAuthenticationInterceptor;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 public class Request<T> {
@@ -18,6 +20,12 @@ public class Request<T> {
         }catch (HttpClientErrorException e){
             status = e.toString();
             return false;
+        }catch (ResourceAccessException e){
+            status = e.toString();
+            return false;
+        }catch (HttpServerErrorException e){
+            status = e.toString();
+            return false;
         }
         return true;
     }
@@ -27,6 +35,12 @@ public class Request<T> {
             ResponseEntity<T> responseEntity=restTemplate.exchange(url, HttpMethod.POST,httpEntity,a);
             answer = responseEntity.getBody();
         }catch (HttpClientErrorException e){
+            status = e.toString();
+            return false;
+        }catch (ResourceAccessException e){
+            status = e.toString();
+            return false;
+        }catch (HttpServerErrorException e){
             status = e.toString();
             return false;
         }
