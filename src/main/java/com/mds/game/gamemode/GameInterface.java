@@ -1,5 +1,6 @@
-package com.mds.game;
+package com.mds.game.gamemode;
 
+import com.mds.game.VisualEventInterface;
 import com.mds.game.controller.PlayerControllerInterface;
 import com.mds.game.map.objects.ObjectMapInterface;
 

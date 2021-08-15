@@ -1,6 +1,6 @@
 package com.mds.game.controller;
 
-import com.mds.game.Game;
+import com.mds.game.gamemode.Game;
 import com.mds.game.map.Map;
 import com.mds.game.map.objects.Board;
 import org.springframework.beans.factory.annotation.Autowired;

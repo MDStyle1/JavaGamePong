@@ -1,5 +1,6 @@
-package com.mds.game;
+package com.mds.game.gamemode;
 
+import com.mds.game.VisualEventInterface;
 import com.mds.game.client.Request;
 import com.mds.game.client.UserInfo;
 import com.mds.game.controller.PlayerController;
