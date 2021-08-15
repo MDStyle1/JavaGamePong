@@ -1,14 +1,10 @@
 package com.mds.game;
 
-import com.mds.game.configurations.AppConfig1;
 import com.mds.game.controller.PlayerController;
 import com.mds.game.controller.PlayerControllerInterface;
 import com.mds.game.map.Map;
 import com.mds.game.map.MapInterface;
-import com.mds.game.map.objects.ObjectMap;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 public class Game implements GameInterface{
     @Autowired
