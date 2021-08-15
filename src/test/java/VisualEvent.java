@@ -1,4 +1,3 @@
-import com.mds.game.gamemode.GameInterface;
 import com.mds.game.VisualEventInterface;
 
 public class VisualEvent implements VisualEventInterface {
