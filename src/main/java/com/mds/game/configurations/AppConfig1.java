@@ -1,5 +1,6 @@
 package com.mds.game.configurations;
 
+import com.mds.game.Main;
 import com.mds.game.gamemode.Game;
 import com.mds.game.controller.PlayerController;
 import com.mds.game.map.Map;

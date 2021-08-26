@@ -8,14 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-public class Game {
+public class Game implements GameInterface{
     @Autowired
     private Map map;
+    private EventGame eventGame;
     private boolean endGame=false;
     public int delay=5;
     private boolean pause = true;
     private float deltaTime=0;
-    private EventGame eventGame = new EventGame();
     @Autowired
     private PlayerController playerController1;
     @Autowired
@@ -33,17 +33,28 @@ public class Game {
     }
 
     public void setEventGame(EventGame eventGame) {
-        this.eventGame=eventGame;
+        this.eventGame = eventGame;
     }
 
+    @Override
+    public int getSizeX() {
+        return map.getSizeX();
+    }
+
+    @Override
+    public int getSizeY() {
+        return map.getSizeY();
+    }
+
+    @Override
     public void playPause() {
         pause = !pause;
     }
-
+    @Override
     public boolean isPause() {
         return pause;
     }
-
+    @Override
     public PlayerControllerInterface getPlayer1() {
         return playerController1;
     }
@@ -51,7 +62,7 @@ public class Game {
     public PlayerControllerInterface getPlayer2() {
         return playerController2;
     }
-
+    @Override
     public List<ObjectMapInterface> getMap() {
         return map.getObjectsMap();
     }
@@ -77,7 +88,7 @@ public class Game {
 
     public void endGame(int playerWin){
         endGame=true;
-        if(eventGame!=null) eventGame.endGame(playerWin);
+        if(eventGame!=null) eventGame.endGame(10);
     }
 
     public void startingGame(){
@@ -90,9 +101,9 @@ public class Game {
         }
     }
 
-    public static class EventGame{
-        public void gameStarting(){}
-        public void endGame(int score){}
+    public interface EventGame{
+        void gameStarting();
+        void endGame(int score);
     }
 
     private class ThreadGame implements Runnable {
@@ -101,4 +112,5 @@ public class Game {
             playGame();
         }
     }
+
 }

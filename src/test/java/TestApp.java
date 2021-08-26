@@ -1,6 +1,3 @@
-import com.mds.game.Main;
-import com.mds.game.VisualEventInterface;
-
 public class TestApp {
     public static void main(String[] args) {
         TestApp testApp = new TestApp();
@@ -11,11 +8,6 @@ public class TestApp {
     }
 
     private void start(){
-        VisualEventInterface vis=new VisualEvent(this);
-        Main main= new Main();
-        GameInterface game = main.getGame();
-//        game.setVisualEventInterface(vis);
-        game.createMapAndStart();
-        game.playPause();
+
     }
 }

@@ -1,6 +1,5 @@
 package com.mds.game.map;
 
-import com.mds.game.map.objects.ObjectMap;
 import com.mds.game.map.objects.ObjectMapInterface;
 
 import java.util.List;
