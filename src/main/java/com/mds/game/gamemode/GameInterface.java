@@ -9,7 +9,10 @@ public interface GameInterface {
     void playPause();
     boolean isPause();
     PlayerControllerInterface getPlayer1();
+    PlayerControllerInterface getPlayer2();
     List<ObjectMapInterface> getMap();
     int getSizeX();
     int getSizeY();
+    void stopGame();
+    int getScore();
 }

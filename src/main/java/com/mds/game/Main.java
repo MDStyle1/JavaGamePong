@@ -2,8 +2,9 @@ package com.mds.game;
 
 import com.mds.game.client.Request;
 import com.mds.game.client.ScoreInfo;
+import com.mds.game.client.ScoreList;
 import com.mds.game.client.UserInfo;
-import com.mds.game.configurations.AppConfig1;
+import com.mds.game.configurations.AppConfigSingleGame;
 import com.mds.game.gamemode.Game;
 import com.mds.game.gamemode.GameInterface;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -14,7 +15,7 @@ import java.util.List;
 @Component
  public class Main implements MainInterface,Game.EventGame{
     private Game game;
-    private String host = "http://localhost:8080";
+    private String host = "http://178.154.241.92:8080";
     private String name;
     private String password;
     private boolean isAuth = false;
@@ -42,7 +43,7 @@ import java.util.List;
     }
 
     private void createGameAndStart(){
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig1.class);
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfigSingleGame.class);
         game = (Game) context.getBean("game");
         game.setEventGame(this);
         game.startingGame();
@@ -62,9 +63,11 @@ import java.util.List;
                 isAuth=true;
                 this.name=name;
                 this.password=password;
+                System.out.println(request.answer);
                 return true;
             }else {
                 statusErrorServer=request.status;
+                System.out.println(statusErrorServer);
                 return false;
             }
         }else {
@@ -109,11 +112,23 @@ import java.util.List;
         if(isAuth){
             isAuth=false;
             name=null;
-            password=name;
+            password=null;
             playOnline=false;
         }
         return true;
      }
+
+    @Override
+    public List<ScoreInfo> getScoresTop10() {
+        Request request = new Request<ScoreList>();
+        if(request.getRequest(host+"/scores/top10",ScoreList.class)){
+            ScoreList scoreList= (ScoreList) request.answer;
+            return scoreList.list;
+        }else {
+            statusErrorServer=request.status;
+            return null;
+        }
+    }
 
     @Override
     public GameInterface getGameInterface() {
@@ -122,7 +137,7 @@ import java.util.List;
 
     @Override
      public void gameStarting() {
-
+        if(eventMain!=null)eventMain.gameIsCreate();
      }
 
      @Override
@@ -141,6 +156,7 @@ import java.util.List;
         return false;
     }
     public interface EventMain{
+        void gameIsCreate();
         void endGame();
     }
 }

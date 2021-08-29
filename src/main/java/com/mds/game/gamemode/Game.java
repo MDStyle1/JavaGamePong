@@ -10,26 +10,32 @@ import java.util.List;
 
 public class Game implements GameInterface{
     @Autowired
-    private Map map;
-    private EventGame eventGame;
-    private boolean endGame=false;
-    public int delay=5;
-    private boolean pause = true;
-    private float deltaTime=0;
+    protected Map map;
+    protected EventGame eventGame;
+    protected boolean endGame=false;
+    protected int delay=5;
+    protected boolean pause = true;
+    protected float deltaTime=0;
     @Autowired
     private PlayerController playerController1;
-    @Autowired
-    private PlayerController playerController2;
-    private boolean canCreateMap =false;
-    private boolean isStartingGame = false;
+    protected boolean canCreateMap =false;
+    protected boolean isStartingGame = false;
+    private int score;
 
-    private Thread threadGame;
-    private ThreadGame thGame;
+    protected Thread threadGame;
+    protected ThreadGame thGame;
 
-    private float cfps=0;
-    private int count =0,timer=0;
+    protected float cfps=0;
+    protected int count =0,timer=0;
 
     public Game() {
+    }
+    @Override
+    public int getScore() {
+        return score;
+    }
+    public void addScore(){
+        score++;
     }
 
     public void setEventGame(EventGame eventGame) {
@@ -58,16 +64,22 @@ public class Game implements GameInterface{
     public PlayerControllerInterface getPlayer1() {
         return playerController1;
     }
-
+    @Override
     public PlayerControllerInterface getPlayer2() {
-        return playerController2;
+        return null;
     }
     @Override
     public List<ObjectMapInterface> getMap() {
         return map.getObjectsMap();
     }
 
-    private void playGame() {
+    @Override
+    public void stopGame() {
+        if(!pause)playPause();
+        endGame=true;
+    }
+
+    protected void playGame() {
         long currentTime;
         long lastFrameTime = System.nanoTime();
         while (!endGame){
@@ -88,7 +100,7 @@ public class Game implements GameInterface{
 
     public void endGame(int playerWin){
         endGame=true;
-        if(eventGame!=null) eventGame.endGame(10);
+        if(eventGame!=null) eventGame.endGame(score);
     }
 
     public void startingGame(){
@@ -106,7 +118,7 @@ public class Game implements GameInterface{
         void endGame(int score);
     }
 
-    private class ThreadGame implements Runnable {
+    protected class ThreadGame implements Runnable {
         @Override
         public void run() {
             playGame();

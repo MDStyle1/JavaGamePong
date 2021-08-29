@@ -1,7 +1,7 @@
 package com.mds.game;
 
+import com.mds.game.client.ScoreInfo;
 import com.mds.game.gamemode.GameInterface;
-import com.mds.game.map.objects.ObjectMapInterface;
 
 import java.util.List;
 
@@ -10,6 +10,7 @@ public interface MainInterface {
     boolean authServer();
     boolean registerServer(String name,String password);
     boolean loggout();
+    List<ScoreInfo> getScoresTop10();
     String getStatusErrorServer();
     boolean createGame();
     void setEventMain(Main.EventMain eventMain);

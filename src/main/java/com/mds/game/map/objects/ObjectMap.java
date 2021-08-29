@@ -220,7 +220,9 @@ public class ObjectMap implements ObjectMapInterface{
                     v1.normalise();
                     Vector2d v2 = new Vector2d(-v1.getX(),-v1.getY());
                     float angle=vectorMove.scolar(v2);
-                    if(angle>-0.2){
+                    if(true
+//                            angle>-0.2
+                    ){
                         float l1;
                         if(object.typeCollision==TypeCollision.box){
                             angle=(float) Math.acos(object.forwardVector.scolar(v1));

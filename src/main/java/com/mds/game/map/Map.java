@@ -1,10 +1,7 @@
 package com.mds.game.map;
 
 import com.mds.game.gamemode.Game;
-import com.mds.game.map.objects.Ball;
-import com.mds.game.map.objects.Board;
-import com.mds.game.map.objects.ObjectMap;
-import com.mds.game.map.objects.ObjectMapInterface;
+import com.mds.game.map.objects.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -23,14 +20,18 @@ public class Map implements MapInterface {
     public Game game;
 
     @Autowired
-    public Map(int sizeX, int sizeY,List<ObjectMap> objectsMap) {
-        if(sizeX<50){
-            this.sizeX = 50;
-        } else this.sizeX = sizeX;
-        if(sizeY<200){
-            this.sizeY = 200;
-        } else this.sizeY = sizeY;
-        new Ball(sizeX/2,sizeY/2,10,this,objectsMap);
+    public Map(int sizeX, int sizeY,List<ObjectMap> objectsMap,int ball) {
+        this.objectsMap=objectsMap;
+        this.sizeX=sizeX;
+        this.sizeY=sizeY;
+        createBall(ball);
+    }
+    private void createBall(int ball){
+        if(ball==1){
+            new BallSingleGame(sizeX/2,sizeY/2,10,this,objectsMap);
+        }else if(ball==2){
+            new Ball(sizeX/2,sizeY/2,10,this,objectsMap);
+        }
     }
 
     public int getSizeX() {
@@ -59,6 +60,7 @@ public class Map implements MapInterface {
     }
 
     public Board addPlayer(int number){
+        System.out.println("AddPlayer"+number);
         int vy;
         Board board;
         if(number==1){

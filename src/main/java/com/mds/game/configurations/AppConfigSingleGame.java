@@ -4,6 +4,7 @@ import com.mds.game.gamemode.Game;
 import com.mds.game.controller.PlayerController;
 import com.mds.game.gamemode.GameMultiplayerGame;
 import com.mds.game.map.Map;
+import com.mds.game.map.MapSingleGame;
 import com.mds.game.map.objects.ObjectMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -14,29 +15,24 @@ import java.util.List;
 
 @Configuration
 //@ComponentScan
-public class AppConfig1 {
+public class AppConfigSingleGame {
 
     @Bean
     List<ObjectMap> objectMapList(){
         return new ArrayList<ObjectMap>();
     }
     @Bean
-    Game game(){
-        return new GameMultiplayerGame();
+    Map map(){
+        return new MapSingleGame(150,200,objectMapList(),1);
     }
     @Bean
-    Map map(){
-        return new Map(100,200,objectMapList(),2);
+    Game game(){
+        return new Game();
     }
     @Bean
     PlayerController playerController1(){
-        System.out.println("CreateMultuPlayer1");
+        System.out.println("CreateSinglePlayer1");
         return new PlayerController(map(),game(),1);
-    }
-    @Bean
-    PlayerController playerController2(){
-        System.out.println("CreateMultuPlayer2");
-        return new PlayerController(map(),game(),2);
     }
 
 }
