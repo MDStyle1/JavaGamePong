@@ -111,10 +111,14 @@ public class Game implements GameInterface{
             if(eventGame!=null) eventGame.gameStarting();
         }
     }
+    public void updateMap(BufferedImage map){
+        if(eventGame!=null) eventGame.updateMap(map);
+    }
 
     public interface EventGame{
         void gameStarting();
         void endGame(int score);
+        void updateMap(BufferedImage map);
     }
 
     protected class ThreadGame implements Runnable {

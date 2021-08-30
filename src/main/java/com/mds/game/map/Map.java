@@ -55,6 +55,7 @@ public class Map implements MapInterface {
     }
     public void updateMap(){
         renderMap.updateMap();
+        game.updateMap(renderMap.getMap());
     }
     public List<ObjectMap> getObjectsInMap() { return objectsMap; }
 
