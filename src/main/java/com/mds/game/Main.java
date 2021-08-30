@@ -10,6 +10,7 @@ import com.mds.game.gamemode.GameInterface;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 @Component
@@ -152,7 +153,12 @@ import java.util.List;
         }
      }
 
-     private boolean newScore(int score){
+    @Override
+    public void updateMap(BufferedImage map) {
+        if(eventMain!=null) eventMain.updateMap(map);
+    }
+
+    private boolean newScore(int score){
         Request request = new Request<String>("Game","MyJavaGame");
         ScoreInfo scoreInfo = new ScoreInfo();
         scoreInfo.name = name;
@@ -163,5 +169,6 @@ import java.util.List;
     public interface EventMain{
         void gameIsCreate();
         void endGame();
+        void updateMap(BufferedImage map);
     }
 }
