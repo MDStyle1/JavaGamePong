@@ -176,6 +176,7 @@ public class ObjectMap implements ObjectMapInterface{
         coord3.setY(y-sizeY);
         coord4.setX(x-sizeX);
         coord4.setY(y-sizeY);
+        map.updateMap();
     }
     protected boolean checkHitMap(){
         float angle1 = (float) Math.acos(forwardVector.scolar(vectorMove));

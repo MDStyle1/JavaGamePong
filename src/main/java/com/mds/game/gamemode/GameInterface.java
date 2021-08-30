@@ -3,6 +3,7 @@ package com.mds.game.gamemode;
 import com.mds.game.controller.PlayerControllerInterface;
 import com.mds.game.map.objects.ObjectMapInterface;
 
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 public interface GameInterface {
@@ -10,9 +11,9 @@ public interface GameInterface {
     boolean isPause();
     PlayerControllerInterface getPlayer1();
     PlayerControllerInterface getPlayer2();
-    List<ObjectMapInterface> getMap();
     int getSizeX();
     int getSizeY();
     void stopGame();
     int getScore();
+    BufferedImage getMap();
 }

@@ -1,9 +1,11 @@
 package com.mds.game.map;
 
 import com.mds.game.gamemode.Game;
+import com.mds.game.graphics.RenderMap;
 import com.mds.game.map.objects.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,7 @@ public class Map implements MapInterface {
     protected Board boardPlayer2;
     @Autowired
     public Game game;
+    private RenderMap renderMap;
 
     @Autowired
     public Map(int sizeX, int sizeY,List<ObjectMap> objectsMap,int ball) {
@@ -25,6 +28,7 @@ public class Map implements MapInterface {
         this.sizeX=sizeX;
         this.sizeY=sizeY;
         createBall(ball);
+        renderMap = new RenderMap(this);
     }
     private void createBall(int ball){
         if(ball==1){
@@ -46,11 +50,12 @@ public class Map implements MapInterface {
         objectsMap.add(objectMap);
     }
 
-    public List<ObjectMapInterface> getObjectsMap() {
-        List<ObjectMapInterface> s = new ArrayList<ObjectMapInterface>(objectsMap);
-        return s;
+    public BufferedImage getImageMap() {
+        return renderMap.getMap();
     }
-
+    public void updateMap(){
+        renderMap.updateMap();
+    }
     public List<ObjectMap> getObjectsInMap() { return objectsMap; }
 
     public void tick(float deltaTime) {

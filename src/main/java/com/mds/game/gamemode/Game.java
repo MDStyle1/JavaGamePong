@@ -3,10 +3,9 @@ package com.mds.game.gamemode;
 import com.mds.game.controller.PlayerController;
 import com.mds.game.controller.PlayerControllerInterface;
 import com.mds.game.map.Map;
-import com.mds.game.map.objects.ObjectMapInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
+import java.awt.image.BufferedImage;
 
 public class Game implements GameInterface{
     @Autowired
@@ -69,8 +68,8 @@ public class Game implements GameInterface{
         return null;
     }
     @Override
-    public List<ObjectMapInterface> getMap() {
-        return map.getObjectsMap();
+    public BufferedImage getMap() {
+        return map.getImageMap();
     }
 
     @Override

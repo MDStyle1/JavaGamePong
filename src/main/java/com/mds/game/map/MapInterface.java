@@ -1,11 +1,9 @@
 package com.mds.game.map;
 
-import com.mds.game.map.objects.ObjectMapInterface;
-
-import java.util.List;
+import java.awt.image.BufferedImage;
 
 public interface MapInterface {
-    List<ObjectMapInterface> getObjectsMap();
+    BufferedImage getImageMap();
     int getSizeX();
     int getSizeY();
 }
