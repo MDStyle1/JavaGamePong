@@ -29,6 +29,11 @@ import java.util.List;
     }
 
     @Override
+    public boolean isAuth() {
+        return isAuth;
+    }
+
+    @Override
     public void setEventMain(EventMain eventMain) {
         this.eventMain = eventMain;
     }

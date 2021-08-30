@@ -15,4 +15,5 @@ public interface MainInterface {
     boolean createGame();
     void setEventMain(Main.EventMain eventMain);
     GameInterface getGameInterface();
+    boolean isAuth();
 }
