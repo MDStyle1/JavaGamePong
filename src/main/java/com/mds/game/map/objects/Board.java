@@ -29,9 +29,9 @@ public class Board extends ObjectMap{
         //velocity+=10;
     }
     synchronized public void eventMove(int v){
-        if(v<=-1){
+        if(v<0){
             vectorMove.setVector(-1,0);
-        }else if(v>=1){
+        }else if(v>0){
             vectorMove.setVector(1,0);
         } else vectorMove.setVector(0,0);
     }

@@ -16,4 +16,6 @@ public interface GameInterface {
     void stopGame();
     int getScore();
     BufferedImage getMap();
+    String getPosBall();
+    void setEventMapGraphics(Game.EventMapGraphics eventMapGraphics);
 }

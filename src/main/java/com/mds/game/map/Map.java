@@ -27,8 +27,8 @@ public class Map implements MapInterface {
         this.objectsMap=objectsMap;
         this.sizeX=sizeX;
         this.sizeY=sizeY;
-        createBall(ball);
         renderMap = new RenderMap(this);
+        createBall(ball);
     }
     private void createBall(int ball){
         if(ball==1){
@@ -54,8 +54,10 @@ public class Map implements MapInterface {
         return renderMap.getMap();
     }
     public void updateMap(){
-        renderMap.updateMap();
-        game.updateMap(renderMap.getMap());
+        if(renderMap!=null){
+            renderMap.updateMap();
+            game.updateMap(renderMap.getMap());
+        }
     }
     public List<ObjectMap> getObjectsInMap() { return objectsMap; }
 

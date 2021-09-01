@@ -153,11 +153,6 @@ import java.util.List;
         }
      }
 
-    @Override
-    public void updateMap(BufferedImage map) {
-        if(eventMain!=null) eventMain.updateMap(map);
-    }
-
     private boolean newScore(int score){
         Request request = new Request<String>("Game","MyJavaGame");
         ScoreInfo scoreInfo = new ScoreInfo();
@@ -169,6 +164,5 @@ import java.util.List;
     public interface EventMain{
         void gameIsCreate();
         void endGame();
-        void updateMap(BufferedImage map);
     }
 }

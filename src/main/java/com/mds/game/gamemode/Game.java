@@ -3,6 +3,8 @@ package com.mds.game.gamemode;
 import com.mds.game.controller.PlayerController;
 import com.mds.game.controller.PlayerControllerInterface;
 import com.mds.game.map.Map;
+import com.mds.game.map.objects.ObjectMap;
+import com.mds.game.map.objects.TypeObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.awt.image.BufferedImage;
@@ -11,6 +13,7 @@ public class Game implements GameInterface{
     @Autowired
     protected Map map;
     protected EventGame eventGame;
+    protected EventMapGraphics eventMapGraphics;
     protected boolean endGame=false;
     protected int delay=5;
     protected boolean pause = true;
@@ -39,6 +42,10 @@ public class Game implements GameInterface{
 
     public void setEventGame(EventGame eventGame) {
         this.eventGame = eventGame;
+    }
+    @Override
+    public void setEventMapGraphics(EventMapGraphics eventMapGraphics) {
+        this.eventMapGraphics = eventMapGraphics;
     }
 
     @Override
@@ -78,9 +85,21 @@ public class Game implements GameInterface{
         endGame=true;
     }
 
+    @Override
+    public String getPosBall() {
+        String string ="";
+        for(ObjectMap objectMap:map.getObjectsInMap()){
+            if(objectMap.getTypeObject()== TypeObject.ball){
+                string =objectMap.getX()+" : "+objectMap.getY();
+            }
+        }
+        return string;
+    }
+
     protected void playGame() {
         long currentTime;
         long lastFrameTime = System.nanoTime();
+        map.updateMap();
         while (!endGame){
             if(!pause){
                 map.tick(deltaTime);
@@ -112,12 +131,14 @@ public class Game implements GameInterface{
         }
     }
     public void updateMap(BufferedImage map){
-        if(eventGame!=null) eventGame.updateMap(map);
+        if(eventMapGraphics!=null) eventMapGraphics.updateMap(map);
     }
 
     public interface EventGame{
         void gameStarting();
         void endGame(int score);
+    }
+    public interface EventMapGraphics{
         void updateMap(BufferedImage map);
     }
 
