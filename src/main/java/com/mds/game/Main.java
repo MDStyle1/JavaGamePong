@@ -1,5 +1,6 @@
 package com.mds.game;
 
+import com.mds.game.chat.Chat;
 import com.mds.game.client.Request;
 import com.mds.game.client.ScoreInfo;
 import com.mds.game.client.ScoreList;
@@ -16,17 +17,32 @@ import java.util.List;
 @Component
  public class Main implements MainInterface,Game.EventGame{
     private Game game;
-    private String host = "http://178.154.241.92:8080";
+    private String host = "http://localhost:8080";
+//            "http://178.154.241.92:8080";
     private String name;
     private String password;
     private boolean isAuth = false;
     private boolean playOnline = false;
     private String statusErrorServer;
     private EventMain eventMain;
+    private Chat chat;
+    private Chat.EventChat eventChat =null;
     private Main() {
     }
     public static MainInterface createMain(){
         return new Main();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getHost() {
+        return host;
     }
 
     @Override
@@ -37,6 +53,11 @@ import java.util.List;
     @Override
     public void setEventMain(EventMain eventMain) {
         this.eventMain = eventMain;
+    }
+    @Override
+    public void setEventChat(Chat.EventChat eventChat) {
+        this.eventChat = eventChat;
+        if(chat!=null) chat.setEventChat(eventChat);
     }
 
     @Override
@@ -69,7 +90,9 @@ import java.util.List;
                 isAuth=true;
                 this.name=name;
                 this.password=password;
-                System.out.println(request.answer);
+                chat = new Chat(this);
+                if(eventChat!=null) chat.setEventChat(eventChat);
+                new Thread(chat).start();
                 return true;
             }else {
                 statusErrorServer=request.status;
@@ -120,6 +143,8 @@ import java.util.List;
             name=null;
             password=null;
             playOnline=false;
+            if(chat!=null) chat.stopChat();
+            chat=null;
         }
         return true;
      }
@@ -151,6 +176,15 @@ import java.util.List;
         if(playOnline){
             newScore(score);
         }
+     }
+     @Override
+     public List<String> getAllMessage(){
+         if(chat!=null) return chat.getList();
+         return null;
+     }
+     @Override
+     public void chatSendMessage(String message){
+        if(chat!=null)chat.sendMessage(message);
      }
 
     private boolean newScore(int score){
