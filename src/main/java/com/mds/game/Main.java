@@ -11,14 +11,18 @@ import com.mds.game.gamemode.GameInterface;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
-import java.awt.image.BufferedImage;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
  public class Main implements MainInterface,Game.EventGame{
+    private Request request;
     private Game game;
-    private String host = "http://localhost:8080";
+    private String host =
+//            "http://localhost:8080";
 //            "http://178.154.241.92:8080";
+            "http://188.243.224.61:8080";
     private String name;
     private String password;
     private boolean isAuth = false;
@@ -31,6 +35,10 @@ import java.util.List;
     }
     public static MainInterface createMain(){
         return new Main();
+    }
+
+    public Request getRequest() {
+        return request;
     }
 
     public String getName() {
@@ -84,8 +92,11 @@ import java.util.List;
     @Override
     synchronized public boolean authServer(String name, String password) {
         if(!isAuth){
-            Request request = new Request<String>(name,password);
-            if(request.getRequest(host +"/login",String.class)){
+            request = new Request();
+            Map map = new HashMap<String,String>();
+            map.put("name",name);
+            map.put("password",password);
+            if(request.<String,Map>postRequest(host +"/login",String.class,map)){
                 playOnline = true;
                 isAuth=true;
                 this.name=name;
@@ -120,11 +131,11 @@ import java.util.List;
     @Override
     synchronized public boolean registerServer(String name, String password) {
         if(!isAuth){
-            Request request = new Request<String>();
+            Request request = new Request();
             UserInfo userInfo = new UserInfo();
             userInfo.name=name;
             userInfo.password=password;
-            if(request.<UserInfo>postRequest(host +"/register",String.class,userInfo)){
+            if(request.<String,UserInfo>postRequest(host +"/register",String.class,userInfo)){
                 return true;
             }else {
                 statusErrorServer=request.status;
@@ -145,20 +156,23 @@ import java.util.List;
             playOnline=false;
             if(chat!=null) chat.stopChat();
             chat=null;
+            request=null;
         }
         return true;
      }
 
     @Override
     public List<ScoreInfo> getScoresTop10() {
-        Request request = new Request<ScoreList>();
-        if(request.getRequest(host+"/scores/top10",ScoreList.class)){
-            ScoreList scoreList= (ScoreList) request.answer;
-            return scoreList.list;
-        }else {
-            statusErrorServer=request.status;
-            return null;
+        if(isAuth){
+            if(request.<ScoreList>getRequest(host+"/scores/top10",ScoreList.class)){
+                ScoreList scoreList= (ScoreList) request.answer;
+                return scoreList.list;
+            }else {
+                statusErrorServer=request.status;
+                return null;
+            }
         }
+        return null;
     }
 
     @Override
@@ -188,11 +202,15 @@ import java.util.List;
      }
 
     private boolean newScore(int score){
-        Request request = new Request<String>("Game","MyJavaGame");
+        Request request = new Request("Game","MyJavaGame");
+        Map map = new HashMap<String,String>();
+        map.put("name",name);
+        map.put("password",password);
+        request.<String,Map>postRequest(host +"/login",String.class,map);
         ScoreInfo scoreInfo = new ScoreInfo();
         scoreInfo.name = name;
         scoreInfo.score = score;
-        request.postRequest(host+"/scores/newscore",String.class,scoreInfo);
+        request.<String,ScoreInfo>postRequest(host+"/scores/newscore",String.class,scoreInfo);
         return false;
     }
     public interface EventMain{

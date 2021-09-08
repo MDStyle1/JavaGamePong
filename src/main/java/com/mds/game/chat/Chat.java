@@ -12,8 +12,10 @@ public class Chat implements Runnable{
     private EventChat eventChat;
     private Main main;
     private boolean stop=false;
+    private Request request;
     public Chat(Main main){
         this.main = main;
+        request = main.getRequest();
     }
 
     public void setEventChat(EventChat eventChat) {
@@ -26,7 +28,6 @@ public class Chat implements Runnable{
 
     private void listenMessage(){
         while(!stop){
-            Request<RequestChatMessage> request = new Request<RequestChatMessage>(main.getName(),main.getPassword());
             RequestChat requestChat = new RequestChat();
             if(chatMessageList.size()==0){
                 requestChat.setId(0);
@@ -34,8 +35,8 @@ public class Chat implements Runnable{
                 requestChat.setId(chatMessageList.get(chatMessageList.size()-1).getId()+1);
             }
 
-            if(request.<RequestChat>postRequest(main.getHost()+"/chat/listen",RequestChatMessage.class,requestChat)){
-                RequestChatMessage requestChatMessage = request.answer;
+            if(request.<RequestChatMessage,RequestChat>postRequest(main.getHost()+"/chat/listen",RequestChatMessage.class,requestChat)){
+                RequestChatMessage requestChatMessage = (RequestChatMessage)request.answer;
                 if(requestChatMessage!=null){
                     List<String> list1 = new ArrayList<String>();
                     requestChatMessage.getChatMessageList().stream().forEach(item->{chatMessageList.add(item);list.add(item.getMessage());list1.add(item.getMessage());});
@@ -58,7 +59,6 @@ public class Chat implements Runnable{
         stop=true;
     }
     public void sendMessage(String message){
-        Request<String> request = new Request<String>(main.getName(),main.getPassword());
         ChatSendMessage chatSendMessage = new ChatSendMessage();
         chatSendMessage.setMessage(message);
         request.postRequest(main.getHost()+"/chat/send",String.class,chatSendMessage);
